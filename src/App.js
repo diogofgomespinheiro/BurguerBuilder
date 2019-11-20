@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
-function App() {
+import Layout from "./containers/Layout/Layout";
+import Routes from "./routes";
+
+import * as authActions from "./store/actions/auth";
+
+const App = ({ onAuthCheck }) => {
+
+  useEffect(() => {
+    onAuthCheck();
+  }, [onAuthCheck]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <BrowserRouter>
+        <Layout>
+          <Routes />
+        </Layout>
+      </BrowserRouter>
     </div>
   );
 }
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    onAuthCheck: () => dispatch(authActions.authCheckState()),
+  }
+}
+
+export default connect(null, mapDispatchToProps)(App);
